@@ -64,6 +64,36 @@ function App() {
     }
   };
 
+  const handleLike = async (id) => {
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/like/${id}`, { method: 'PUT' });
+      if (!res.ok) {
+        throw new Error('Error al registrar like');
+      }
+
+      const updated = await res.json();
+      setPosts((prev) => prev.map((post) => (post.id === id ? updated : post)));
+    } catch (err) {
+      setError('No se pudo registrar el like');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setError('');
+    try {
+      const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        throw new Error('Error al eliminar post');
+      }
+
+      await res.json();
+      setPosts((prev) => prev.filter((post) => post.id !== id));
+    } catch (err) {
+      setError('No se pudo eliminar el post');
+    }
+  };
+
   return (
     <div className="page">
       <h1>📷 Like Me 📷</h1>
@@ -111,8 +141,22 @@ function App() {
               <div className="post-body">
                 <h3>{post.titulo}</h3>
                 <p className="description">{post.descripcion}</p>
-                <div className="footer">
-                  <span className="likes">❤️ {post.likes ?? 0}</span>
+                <div className="actions">
+                  <button
+                    type="button"
+                    className="like-btn"
+                    onClick={() => handleLike(post.id)}
+                  >
+                    ❤️ {post.likes ?? 0}
+                  </button>
+                  <button
+                    type="button"
+                    className="delete-btn"
+                    onClick={() => handleDelete(post.id)}
+                    aria-label="Eliminar post"
+                  >
+                    ✖
+                  </button>
                 </div>
               </div>
             </article>

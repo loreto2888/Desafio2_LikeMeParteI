@@ -39,6 +39,50 @@ app.post('/posts', async (req, res) => {
   }
 });
 
+app.put('/posts/like/:id', async (req, res) => {
+  const id = Number.parseInt(req.params.id, 10);
+
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ error: 'ID invalido' });
+  }
+
+  try {
+    const updateQuery = 'UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING *';
+    const { rows } = await query(updateQuery, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Post no encontrado' });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error updating likes', error);
+    res.status(500).json({ error: 'Error updating likes' });
+  }
+});
+
+app.delete('/posts/:id', async (req, res) => {
+  const id = Number.parseInt(req.params.id, 10);
+
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ error: 'ID invalido' });
+  }
+
+  try {
+    const deleteQuery = 'DELETE FROM posts WHERE id = $1 RETURNING *';
+    const { rows } = await query(deleteQuery, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Post no encontrado' });
+    }
+
+    res.json({ message: 'Post eliminado', post: rows[0] });
+  } catch (error) {
+    console.error('Error deleting post', error);
+    res.status(500).json({ error: 'Error deleting post' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`API Like Me escuchando en http://localhost:${port}`);
 });

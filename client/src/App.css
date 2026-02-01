@@ -70,18 +70,22 @@ textarea {
 }
 
 button {
+  border: none;
+  cursor: pointer;
+}
+
+
+.form button {
   margin-top: 6px;
   width: 100%;
   padding: 9px;
-  border: none;
   border-radius: 4px;
   background: #e4e4e4;
   color: #0a3b92;
   font-weight: 600;
-  cursor: pointer;
 }
 
-button:disabled {
+.form button:disabled {
   opacity: 0.8;
   cursor: not-allowed;
 }
@@ -128,12 +132,28 @@ button:disabled {
   font-size: 14px;
 }
 
-.footer {
+.actions {
   display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  color: #c51162;
+  align-items: center;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 6px 10px;
+  border-radius: 4px;
   font-weight: 600;
+}
+
+.like-btn {
+  background: #fff;
+  color: #c51162;
+  border: 1px solid #f0c2d2;
+}
+
+.delete-btn {
+  background: #fff;
+  color: #e53935;
+  border: 1px solid #f4b7b7;
 }
 
 .empty {
